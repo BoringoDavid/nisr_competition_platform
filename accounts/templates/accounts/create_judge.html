@@ -1,0 +1,17 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<div class="dashboard">
+  <section class="panel" style="max-width:500px;margin:40px auto;">
+    <div class="section-head"><h3>Create Judge</h3></div>
+    <form method="post" style="display:grid;gap:12px;margin-top:14px;">
+      {% csrf_token %}
+      <input class="form-input" name="username" placeholder="Username" required>
+      <input class="form-input" name="email" type="email" placeholder="Email" required>
+      <input class="form-input" name="password" type="password" placeholder="Password" required>
+      <button class="btn" type="submit">Create</button>
+      <a class="btn btn-outline" href="{% url 'admin_dashboard' %}">Cancel</a>
+    </form>
+  </section>
+</div>

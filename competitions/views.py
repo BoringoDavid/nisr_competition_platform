@@ -1,9 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import TeamForm
 from django.contrib import messages
 from .forms import TeamForm, InviteMemberForm
 from .models import Team
+from django.core.mail import send_mail
+from django.conf import settings
+from django.urls import reverse
+from .models import Invitation
 
 @login_required
 def create_team(request):
@@ -22,26 +26,71 @@ def my_team(request):
     teams = request.user.teams.all()
     return render(request, 'competitions/my_team.html', {'teams': teams})
 
-# for inviting team member to join the team
+#====================for inviting team member to join the team=========================
 @login_required
 def invite_member(request, team_id):
-    team = Team.objects.get(id=team_id, leader=request.user)
+    team = get_object_or_404(Team, id=team_id, leader=request.user)
     form = InviteMemberForm(request.POST or None)
 
     if request.method == 'POST' and form.is_valid():
-        username = form.cleaned_data['username']
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            messages.error(request, "User not found.")
-            return render(request, 'competitions/invite_member.html', {'form': form, 'team': team})
+        email = form.cleaned_data['email']
 
-        if team.members.count() >= 2:
+        if team.is_full():
             messages.error(request, "Team is full (max 2 members).")
-        elif team.members.filter(id=user.id).exists():
+        elif team.members.filter(email=email).exists():
             messages.error(request, "User already in team.")
+        elif Invitation.objects.filter(team=team, email=email, status=Invitation.Status.PENDING).exists():
+            messages.error(request, "Invitation already sent to this email.")
         else:
-            team.members.add(user)
-            messages.success(request, f"{user.username} added.")
+            invite = Invitation.objects.create(team=team, email=email)
+            link = request.build_absolute_uri(
+                reverse('accept_invitation', args=[invite.token])
+            )
+            send_mail(
+                subject=f"Invitation to join team '{team.name}'",
+                message=f"You were invited to join {team.name}.\nClick: {link}",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+            )
+            messages.success(request, f"Invitation sent to {email}.")
 
-    return render(request, 'competitions/invite_member.html', {'form': form, 'team': team})
+    invitations = team.invitations.filter(status=Invitation.Status.PENDING)
+    return render(request, 'competitions/invite_member.html', {
+        'form': form, 'team': team, 'invitations': invitations,
+    })
+
+#===================================== for accepting the invitation to join a team ===================================================
+@login_required
+def accept_invitation(request, token):
+
+    if not request.user.is_authenticated:
+        invite = get_object_or_404(Invitation, token=token)
+        return redirect(f"{reverse('signup')}?email={invite.email}&next={request.path}")
+
+    invite = get_object_or_404(Invitation, token=token)
+
+    if invite.status != Invitation.Status.PENDING:
+        messages.error(request, "Invitation no longer valid.")
+        return redirect('competitor_dashboard')
+
+    if invite.is_expired():
+        invite.status = Invitation.Status.EXPIRED
+        invite.save()
+        messages.error(request, "Invitation expired.")
+        return redirect('competitor_dashboard')
+
+    if request.user.email != invite.email:
+        messages.error(request, "This invitation was sent to a different email.")
+        return redirect('competitor_dashboard')
+
+    team = invite.team
+    if team.is_full():
+        messages.error(request, "Team is full.")
+    else:
+        team.members.add(request.user)
+        team.update_status()
+        invite.status = Invitation.Status.ACCEPTED
+        invite.save()
+        messages.success(request, f"You joined {team.name}!")
+
+    return redirect('my_team')
