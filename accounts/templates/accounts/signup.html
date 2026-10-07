@@ -7,6 +7,7 @@
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
+    <input type="hidden" name="next" value="{{ next }}">
     <button type="submit">Register</button>
   </form>
   <a class="auth-link" href="{% url 'login' %}">Already have an account?</a>

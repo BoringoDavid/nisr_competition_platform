@@ -1,22 +1,38 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/base.css' %}">
-<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 
-<div class="auth-container">
-  <h2>Invite Member — {{ team.name }}</h2>
+<div class="dashboard">
+  <section class="panel" style="max-width:520px;margin:40px auto;">
+    <div class="section-head">
+      <h3>Invite — {{ team.name }}</h3>
+      <span class="badge" data-status="{{ team.status }}">{{ team.get_status_display }}</span>
+    </div>
 
-  {% if messages %}
-    {% for msg in messages %}<p>{{ msg }}</p>{% endfor %}
-  {% endif %}
+    {% if messages %}
+      {% for msg in messages %}<p class="alert alert-{{ msg.tags }}">{{ msg }}</p>{% endfor %}
+    {% endif %}
 
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Invite</button>
-  </form>
+    <form method="post" style="display:grid;gap:12px;margin:14px 0;">
+      {% csrf_token %}
+      <input class="form-input" name="email" type="email" placeholder="member@example.com" required>
+      <button class="btn" type="submit">Send invitation</button>
+    </form>
 
-  <h3>Members</h3>
-  <ul>
-    {% for m in team.members.all %}<li>{{ m.username }}</li>{% endfor %}
-  </ul>
+    <h4>Pending invitations</h4>
+    {% for inv in invitations %}
+      <p class="item-meta">{{ inv.email }} — expires {{ inv.expires_at|date:"d M Y" }}</p>
+    {% empty %}
+      <p class="item-meta">None.</p>
+    {% endfor %}
+
+    <h4>Members ({{ team.members.count }}/2)</h4>
+    <ul>
+      {% for m in team.members.all %}
+        <li>{{ m.username }} {% if m.is_rwandan_citizen %}🇷🇼{% endif %}</li>
+      {% endfor %}
+    </ul>
+
+    <a class="btn btn-outline" href="{% url 'my_team' %}">Back</a>
+  </section>
 </div>

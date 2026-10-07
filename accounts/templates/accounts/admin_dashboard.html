@@ -1,0 +1,94 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<div class="dashboard">
+  <header class="dash-header">
+    <div class="brand">
+      <span class="brand-mark">N</span>
+      <span class="brand-name">NISR Platform — Admin</span>
+    </div>
+    <div class="dash-user">
+      <span class="avatar">{{ user.username|first|upper }}</span>
+      <span class="username">{{ user.username }}</span>
+      <a class="logout" href="{% url 'logout' %}">Log out</a>
+    </div>
+  </header>
+
+  <section class="welcome">
+    <h2>Admin Panel</h2>
+    <p>Manage users, teams, submissions and competitions.</p>
+  </section>
+
+  {% if messages %}
+    <section class="alerts">
+      {% for msg in messages %}<p class="alert alert-{{ msg.tags }}">{{ msg }}</p>{% endfor %}
+    </section>
+  {% endif %}
+
+  <section class="stats">
+    <div class="stat"><span class="stat-value">{{ total_competitors }}</span><span class="stat-label">Competitors</span></div>
+    <div class="stat"><span class="stat-value">{{ total_judges }}</span><span class="stat-label">Judges</span></div>
+    <div class="stat"><span class="stat-value">{{ total_teams }}</span><span class="stat-label">Teams</span></div>
+    <div class="stat"><span class="stat-value">{{ total_submissions }}</span><span class="stat-label">Submissions</span></div>
+  </section>
+
+  <div class="layout">
+    <div class="main-col">
+
+      <section class="panel">
+        <div class="section-head">
+          <h3>Users</h3>
+          <div class="actions">
+            <a class="btn btn-outline btn-sm" href="{% url 'create_admin' %}">+ Admin</a>
+            <a class="btn btn-sm" href="{% url 'create_judge' %}">+ Judge</a>
+          </div>
+        </div>
+        {% for u in users %}
+          <article class="item">
+            <div class="item-body">
+              <div class="item-title">
+                <strong>{{ u.username }}</strong>
+                <span class="badge">{{ u.get_role_display|default:"—" }}</span>
+              </div>
+              <p class="item-meta">{{ u.email|default:"—" }}</p>
+            </div>
+            <time class="item-date">{{ u.date_joined|date:"d M Y" }}</time>
+          </article>
+        {% empty %}<div class="empty"><p>No users.</p></div>{% endfor %}
+      </section>
+
+      <section class="panel">
+        <div class="section-head"><h3>All Teams</h3></div>
+        {% for team in teams %}
+          <article class="item">
+            <div class="item-body">
+              <div class="item-title">
+                <strong>{{ team.name }}</strong>
+                <span class="badge" data-status="{{ team.status }}">{{ team.get_status_display }}</span>
+              </div>
+              <p class="item-meta">{{ team.competition.name }} · {{ team.members.count }} members</p>
+            </div>
+          </article>
+        {% empty %}<div class="empty"><p>No teams.</p></div>{% endfor %}
+      </section>
+
+      <section class="panel">
+        <div class="section-head"><h3>All Submissions</h3></div>
+        {% for sub in submissions %}
+          <article class="item">
+            <div class="item-body">
+              <div class="item-title">
+                <strong>{{ sub.team.name }}</strong>
+                {% if sub.is_late %}<span class="badge badge-late">Late</span>{% endif %}
+              </div>
+              <p class="item-meta">{{ sub.competition.name }}</p>
+            </div>
+            <time class="item-date">{{ sub.submitted_at|date:"d M Y" }}</time>
+          </article>
+        {% empty %}<div class="empty"><p>No submissions.</p></div>{% endfor %}
+      </section>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+
+<div class="auth-container">
+  <h2>Judge Dashboard</h2>
+  <p>Welcome, {{ user.username }}</p>
+  <a class="auth-link" href="{% url 'logout' %}">Logout</a>
+</div>
