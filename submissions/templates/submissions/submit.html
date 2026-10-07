@@ -1,0 +1,18 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+
+<div class="auth-container">
+  <h2>Submit — {{ team.name }}</h2>
+  <p>Track: {{ team.competition.get_track_display }}</p>
+
+  {% if messages %}
+    {% for msg in messages %}<p>{{ msg }}</p>{% endfor %}
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Submission</button>
+  </form>
+</div>

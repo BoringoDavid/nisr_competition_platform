@@ -1,0 +1,16 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+
+<div class="auth-container">
+  <h2>My Teams</h2>
+  {% for team in teams %}
+    <p>
+      <strong>{{ team.name }}</strong> — {{ team.competition.name }}
+      <a href="{% url 'invite_member' team.id %}">Invite</a>
+    </p>
+  {% empty %}
+    <p>No teams yet.</p>
+  {% endfor %}
+  <a class="auth-link" href="{% url 'create_team' %}">Create new team</a>
+</div>

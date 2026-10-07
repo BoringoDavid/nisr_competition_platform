@@ -1,0 +1,22 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+
+<div class="auth-container">
+  <h2>Invite Member — {{ team.name }}</h2>
+
+  {% if messages %}
+    {% for msg in messages %}<p>{{ msg }}</p>{% endfor %}
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Invite</button>
+  </form>
+
+  <h3>Members</h3>
+  <ul>
+    {% for m in team.members.all %}<li>{{ m.username }}</li>{% endfor %}
+  </ul>
+</div>

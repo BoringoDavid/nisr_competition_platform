@@ -1,0 +1,12 @@
+:root {
+  --nisr-primary: #2D51A1;
+  --nisr-primary-light: #33A7DF;
+  --nisr-secondary-green: #4BA847;
+  --nisr-secondary-yellow: #EEE808;
+  --nisr-secondary-orange: #F68D52;
+  --nisr-tertiary-light: #B2E6FA;
+  --nisr-tertiary-dark: #383838;
+  --nisr-black: #000000;
+  --nisr-white: #ffffff;
+  --nisr-gray: #f4f6f9;
+}
