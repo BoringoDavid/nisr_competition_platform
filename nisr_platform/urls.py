@@ -26,6 +26,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),  # for app of accounts (user managements)
     path('competitions/', include('competitions.urls')), # for competiton team registration
     path('submissions/', include('submissions.urls')), # for team submission app
+    path('evaluations/', include('evaluations.urls')), # judge dashboard + scoring + leaderboard
 
 ]
 
