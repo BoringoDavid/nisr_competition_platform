@@ -9,6 +9,33 @@ from django.conf import settings
 from django.urls import reverse
 from .models import Invitation
 
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from .forms import CompetitionForm
+
+User = get_user_model()
+
+
+@login_required
+def create_competition(request):
+    if request.user.is_superuser:
+        return redirect('/admin/')
+    if request.user.role != User.Role.ADMIN:
+        return redirect('competitor_dashboard')
+
+    form = CompetitionForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, "Competition created.")
+        return redirect('admin_dashboard')
+
+    return render(request, 'competitions/create_competition.html', {'form': form})
+
+    
+
 @login_required
 def create_team(request):
     form = TeamForm(request.POST or None)
@@ -46,9 +73,26 @@ def invite_member(request, team_id):
             link = request.build_absolute_uri(
                 reverse('accept_invitation', args=[invite.token])
             )
+            subject = f"You're invited to join team '{team.name}' on NISR Competition Platform"
+
+            message = f"""Hello,
+
+            You have been invited by {request.user.username} to join the team "{team.name}"
+            for the competition: {team.competition.name} ({team.competition.get_track_display()}).
+
+            Click the link below to accept the invitation:
+            {link}
+
+            This invitation expires on {invite.expires_at.strftime('%d %B %Y')}.
+
+            If you were not expecting this invitation, you can ignore this email.
+
+            — NISR Competition Platform
+            """
+
             send_mail(
-                subject=f"Invitation to join team '{team.name}'",
-                message=f"You were invited to join {team.name}.\nClick: {link}",
+                subject=subject,
+                message=message,
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[email],
             )
@@ -94,3 +138,4 @@ def accept_invitation(request, token):
         messages.success(request, f"You joined {team.name}!")
 
     return redirect('my_team')
+

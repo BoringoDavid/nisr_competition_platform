@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Undergraduate Competition — NISR{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/landing.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <h1>Undergraduate Competition</h1>
+  <p>For university students across Rwanda. Two tracks: Infographics and Hackathon.</p>
+</section>
+
+<section class="landing-section">
+  <h2>Tracks</h2>
+  <div class="track-grid">
+    <article class="track-card">
+      <span class="track-icon">📊</span>
+      <h3>Infographics</h3>
+      <p>Submit one static file and one dynamic visual based on official NISR statistics. Entries are evaluated for clarity, accuracy, and visual impact.</p>
+    </article>
+    <article class="track-card">
+      <span class="track-icon">💻</span>
+      <h3>Hackathon</h3>
+      <p>Build a data-driven solution in one of three focus areas. Teams submit a working prototype, source repository, and documentation.</p>
+    </article>
+  </div>
+</section>
+
+<section class="landing-section">
+  <h2>Focus Areas (Hackathon)</h2>
+  <ul class="focus-list">
+    <li>🌾 Agricultural Productivity</li>
+    <li>💰 Financial Inclusion</li>
+    <li>🚀 Open Innovation</li>
+  </ul>
+</section>
+
+<section class="landing-section">
+  <h2>Eligibility</h2>
+  <ul class="check-list">
+    <li>Teams of exactly <strong>2 members</strong>.</li>
+    <li>At least <strong>one Rwandan citizen</strong> per team.</li>
+    <li>Previous 1st–3rd place winners are not eligible.</li>
+    <li>Members must be currently enrolled university students.</li>
+  </ul>
+</section>
+
+<section class="landing-section">
+  <h2>Evaluation Criteria</h2>
+  <div class="criteria-grid">
+    <div class="criteria"><span>20%</span><p>Relevance</p></div>
+    <div class="criteria"><span>25%</span><p>Data Utilization</p></div>
+    <div class="criteria"><span>15%</span><p>UI/UX</p></div>
+    <div class="criteria"><span>15%</span><p>Creativity</p></div>
+    <div class="criteria"><span>25%</span><p>Impact</p></div>
+  </div>
+</section>
+
+<section class="landing-section">
+  <h2>Submission Requirements</h2>
+  <ul class="check-list">
+    <li><strong>Infographics:</strong> one static file (PDF/PNG/SVG) + one dynamic file or link (video/dashboard).</li>
+    <li><strong>Hackathon:</strong> GitHub repository link + deployed application link + documentation file.</li>
+    <li>All submissions must be original work. AI use must be disclosed.</li>
+  </ul>
+</section>
+
+<section class="landing-cta">
+  <h2>Ready to compete?</h2>
+  <p>Register now and form your team.</p>
+  <a class="btn" href="{% url 'signup' %}">Register</a>
+</section>
+
+{% endblock %}

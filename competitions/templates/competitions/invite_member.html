@@ -1,38 +1,43 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
-<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% extends 'base.html' %}
 
-<div class="dashboard">
-  <section class="panel" style="max-width:520px;margin:40px auto;">
-    <div class="section-head">
-      <h3>Invite — {{ team.name }}</h3>
-      <span class="badge" data-status="{{ team.status }}">{{ team.get_status_display }}</span>
+{% block title %}Invite — {{ team.name }}{% endblock %}
+
+{% block content %}
+<div class="panel narrow">
+  <div class="section-head">
+    <h3>Invite teammate — {{ team.name }}</h3>
+    <span class="badge" data-status="{{ team.status }}">{{ team.get_status_display }}</span>
+  </div>
+
+  <form method="post" class="stack">
+    {% csrf_token %}
+    <div class="form-row">
+      <label>Email address</label>
+      <input class="form-input" type="email" name="email" placeholder="member@example.com" required>
     </div>
+    <button class="btn btn-block" type="submit">Send invitation</button>
+  </form>
 
-    {% if messages %}
-      {% for msg in messages %}<p class="alert alert-{{ msg.tags }}">{{ msg }}</p>{% endfor %}
-    {% endif %}
+  <h4>Pending invitations</h4>
+  {% for inv in invitations %}
+    <p class="item-meta">{{ inv.email }} — expires {{ inv.expires_at|date:"d M Y" }}</p>
+  {% empty %}
+    <p class="item-meta">None.</p>
+  {% endfor %}
 
-    <form method="post" style="display:grid;gap:12px;margin:14px 0;">
-      {% csrf_token %}
-      <input class="form-input" name="email" type="email" placeholder="member@example.com" required>
-      <button class="btn" type="submit">Send invitation</button>
-    </form>
-
-    <h4>Pending invitations</h4>
-    {% for inv in invitations %}
-      <p class="item-meta">{{ inv.email }} — expires {{ inv.expires_at|date:"d M Y" }}</p>
-    {% empty %}
-      <p class="item-meta">None.</p>
+  <h4>Members ({{ team.members.count }}/2)</h4>
+  <ul class="member-list">
+    {% for m in team.members.all %}
+      <li>{{ m.username }} {% if m.is_rwandan_citizen %}<span class="flag">🇷🇼</span>{% endif %}</li>
     {% endfor %}
+  </ul>
 
-    <h4>Members ({{ team.members.count }}/2)</h4>
-    <ul>
-      {% for m in team.members.all %}
-        <li>{{ m.username }} {% if m.is_rwandan_citizen %}🇷🇼{% endif %}</li>
-      {% endfor %}
-    </ul>
+  {% if team.status == 'confirmed' %}
+    <p class="alert alert-success">✅ Team eligible</p>
+  {% else %}
+    <p class="alert alert-warning">⚠ Needs 2 members, at least one Rwandan citizen.</p>
+  {% endif %}
 
-    <a class="btn btn-outline" href="{% url 'my_team' %}">Back</a>
-  </section>
+  <a class="btn btn-outline" href="{% url 'competitor_dashboard' %}">Back to dashboard</a>
 </div>
+{% endblock %}

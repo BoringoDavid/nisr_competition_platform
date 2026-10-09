@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}High School Competition — NISR{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/landing.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <h1>High School Competition</h1>
+  <p>A dedicated track for secondary school students to explore statistics through creative work.</p>
+</section>
+
+<section class="landing-section">
+  <h2>About the Track</h2>
+  <p>
+    This track introduces high school students to data storytelling and analytical thinking using official statistics
+    published by NISR. Students work in small teams under a teacher's guidance to produce a creative data project.
+  </p>
+</section>
+
+<section class="landing-section">
+  <h2>What You Will Do</h2>
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">1</span>
+      <h4>Learn</h4>
+      <p>Get introduced to Rwanda's official statistics and how they are used.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">2</span>
+      <h4>Explore</h4>
+      <p>Pick a topic and analyze the data behind it.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">3</span>
+      <h4>Create</h4>
+      <p>Design a poster, infographic, or short presentation.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">4</span>
+      <h4>Present</h4>
+      <p>Share findings with judges and peers.</p>
+    </div>
+  </div>
+</section>
+
+<section class="landing-section">
+  <h2>Who Can Participate</h2>
+  <ul class="check-list">
+    <li>Students enrolled in Rwandan secondary schools.</li>
+    <li>Teams formed per school guidelines (announced each edition).</li>
+    <li>Mentorship from a teacher is required.</li>
+  </ul>
+</section>
+
+<section class="landing-section">
+  <h2>Format</h2>
+  <p>
+    The High School track follows a simplified submission and evaluation process designed for younger participants.
+    Full details — including submission format, deadlines, and prizes — are announced per edition.
+  </p>
+</section>
+
+<section class="landing-cta">
+  <h2>Interested?</h2>
+  <p>Contact us for details about the upcoming edition.</p>
+  <a class="btn btn-outline" href="{% url 'contact' %}">Contact</a>
+</section>
+
+{% endblock %}

@@ -1,18 +1,31 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
-<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% extends 'base.html' %}
 
-<div class="auth-container">
-  <h2>Submit — {{ team.name }}</h2>
-  <p>Track: {{ team.competition.get_track_display }}</p>
+{% block title %}Submit — {{ team.name }}{% endblock %}
 
-  {% if messages %}
-    {% for msg in messages %}<p>{{ msg }}</p>{% endfor %}
-  {% endif %}
+{% block content %}
+<div class="panel narrow">
+  <div class="section-head">
+    <h3>{{ team.name }} — Submission</h3>
+    <span class="badge">{{ team.competition.get_track_display }}</span>
+  </div>
 
-  <form method="post" enctype="multipart/form-data">
+  <p class="item-meta">Competition: <strong>{{ team.competition.name }}</strong></p>
+  <p class="item-meta">Deadline: <strong>{{ team.competition.submission_deadline|date:"d M Y, H:i" }}</strong></p>
+
+  <form method="post" enctype="multipart/form-data" class="stack">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Submission</button>
+    {% for field in form %}
+      <div class="form-row">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<small class="form-help">{{ field.help_text }}</small>{% endif %}
+        {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
+      </div>
+    {% endfor %}
+
+    <button class="btn btn-block" type="submit">Save submission</button>
   </form>
+
+  <a class="btn btn-outline" href="{% url 'competitor_dashboard' %}">Back to dashboard</a>
 </div>
+{% endblock %}

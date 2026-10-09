@@ -1,16 +1,40 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
-<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% extends 'base.html' %}
 
-<div class="auth-container">
-  <h2>My Teams</h2>
+{% block title %}My Teams — NISR Platform{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="section-head">
+    <h3>My teams</h3>
+    <a class="btn" href="{% url 'create_team' %}">+ Create team</a>
+  </div>
+
   {% for team in teams %}
-    <p>
-      <strong>{{ team.name }}</strong> — {{ team.competition.name }}
-      <a href="{% url 'invite_member' team.id %}">Invite</a>
-    </p>
+    <article class="item">
+      <div class="item-body">
+        <div class="item-title">
+          <strong>{{ team.name }}</strong>
+          <span class="badge" data-status="{{ team.status }}">{{ team.get_status_display }}</span>
+        </div>
+        <p class="item-meta">
+          {{ team.competition.name }} · {{ team.competition.get_track_display }} ·
+          {{ team.members.count }}/2 members
+        </p>
+        <ul class="member-list">
+          {% for m in team.members.all %}
+            <li>{{ m.username }} {% if m.is_rwandan_citizen %}<span class="flag">🇷🇼</span>{% endif %}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="actions">
+        <a class="btn btn-outline btn-sm" href="{% url 'invite_member' team.id %}">Invite</a>
+        <a class="btn btn-sm" href="{% url 'submit' team.id %}">
+          {% if team.submission %}Edit submission{% else %}Submit{% endif %}
+        </a>
+      </div>
+    </article>
   {% empty %}
-    <p>No teams yet.</p>
+    <div class="empty"><p>No teams yet.</p></div>
   {% endfor %}
-  <a class="auth-link" href="{% url 'create_team' %}">Create new team</a>
-</div>
+</section>
+{% endblock %}

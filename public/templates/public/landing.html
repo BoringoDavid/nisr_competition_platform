@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}NISR Competition Platform — Home{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/landing.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- 1. HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-eyebrow">National Institute of Statistics of Rwanda</span>
+    <h1>Turning Rwanda's Data Into Ideas That Matter</h1>
+    <p>Join Rwanda's brightest students and innovators to transform official statistics into infographics, applications, and solutions that shape the nation.</p>
+    <div class="hero-actions">
+      <a class="btn" href="{% url 'signup' %}">Register as Competitor</a>
+      <a class="btn btn-outline" href="{% url 'competition_undergraduate' %}">Explore the competition</a>
+    </div>
+  </div>
+</section>
+
+<!-- 2. STATS STRIP -->
+<section class="landing-stats">
+  <div class="stat"><span class="stat-value">3</span><span class="stat-label">Competition Tracks</span></div>
+  <div class="stat"><span class="stat-value">2026</span><span class="stat-label">Current Edition</span></div>
+  <div class="stat"><span class="stat-value">2</span><span class="stat-label">Members per Team</span></div>
+  <div class="stat"><span class="stat-value">100%</span><span class="stat-label">Powered by Official Data</span></div>
+</section>
+
+<!-- 3. ABOUT -->
+<section class="landing-section">
+  <h2>About the Platform</h2>
+  <p>
+    The NISR Competition Platform brings Rwanda's data competitions into one place. From registration to evaluation, it
+    supports every step — so participants focus on what matters: turning statistics into insight.
+  </p>
+</section>
+
+<!-- 4. TRACKS -->
+<section class="landing-section">
+  <h2>Competition Tracks</h2>
+  <div class="track-grid">
+
+    <article class="track-card">
+      <span class="track-icon">📊</span>
+      <h3>Infographics</h3>
+      <p>Design compelling static and dynamic infographics built from NISR's official statistics.</p>
+      <a class="card-link" href="{% url 'competition_undergraduate' %}">Learn more →</a>
+    </article>
+
+    <article class="track-card">
+      <span class="track-icon">💻</span>
+      <h3>Hackathon</h3>
+      <p>Build data-driven applications solving real Rwandan challenges in agriculture, finance, and open innovation.</p>
+      <a class="card-link" href="{% url 'competition_undergraduate' %}">Learn more →</a>
+    </article>
+
+    <article class="track-card">
+      <span class="track-icon">🎓</span>
+      <h3>High School</h3>
+      <p>A dedicated track for young innovators to explore statistics through creative, guided projects.</p>
+      <a class="card-link" href="{% url 'competition_high_school' %}">Learn more →</a>
+    </article>
+
+  </div>
+</section>
+
+<!-- 5. HOW IT WORKS -->
+<section class="landing-section">
+  <h2>How It Works</h2>
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">1</span>
+      <h4>Register</h4>
+      <p>Create your competitor account on the platform.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">2</span>
+      <h4>Form a Team</h4>
+      <p>Invite one teammate — at least one member must be a Rwandan citizen.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">3</span>
+      <h4>Submit Your Work</h4>
+      <p>Upload your infographic or share your hackathon links before the deadline.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">4</span>
+      <h4>Get Evaluated</h4>
+      <p>Independent judges score each submission on defined criteria.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6. PAST COMPETITIONS -->
+<section class="landing-section">
+  <h2>Past Competitions</h2>
+  <div class="past-grid">
+    <article class="past-card">
+      <h3>2025 Hackathon</h3>
+      <p>National data-driven innovation challenge with three focus tracks.</p>
+      <a href="https://statistics.gov.rw/about/hackathon/2025-hackathon-competition" target="_blank">View on NISR →</a>
+    </article>
+    <article class="past-card">
+      <h3>Infographics Archive</h3>
+      <p>Winning static and dynamic infographics from previous editions.</p>
+      <a href="https://statistics.gov.rw/about/infographics" target="_blank">View on NISR →</a>
+    </article>
+  </div>
+</section>
+
+<!-- 7. TESTIMONIALS -->
+<section class="landing-section">
+  <h2>What Participants Say</h2>
+  <div class="testimonial-grid">
+    <blockquote class="testimonial">
+      <p>"The competition pushed us to build something real from official data."</p>
+      <cite>— Participant, 2025 Hackathon</cite>
+    </blockquote>
+    <blockquote class="testimonial">
+      <p>"Designing with real statistics taught me the power of clear visuals."</p>
+      <cite>— Participant, Infographics</cite>
+    </blockquote>
+    <blockquote class="testimonial">
+      <p>"Teamwork across disciplines made the experience unforgettable."</p>
+      <cite>— Finalist, 2025</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- 8. PARTNERS -->
+<section class="landing-section partners">
+  <h2>Organized by</h2>
+  <div class="partner-logos">
+    <div class="partner-card">
+      <strong>National Institute of Statistics of Rwanda</strong>
+      <p>Official statistics for national development.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9. FAQ -->
+<section class="landing-section">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq">
+    <details>
+      <summary>Who can participate?</summary>
+      <p>Rwandan citizens and students. Teams must have 2 members, with at least one Rwandan citizen.</p>
+    </details>
+    <details>
+      <summary>How do I submit my work?</summary>
+      <p>After registering, create a team, invite your teammate, then use the submission form on your dashboard.</p>
+    </details>
+    <details>
+      <summary>Can I join more than one track?</summary>
+      <p>Each team competes in one track per edition.</p>
+    </details>
+    <details>
+      <summary>Is there a prize?</summary>
+      <p>Yes — details are announced per edition on the NISR website and competition pages.</p>
+    </details>
+  </div>
+</section>
+
+<!-- 10. FINAL CTA -->
+<section class="landing-cta">
+  <h2>Ready to compete?</h2>
+  <p>Create your account and join Rwanda's brightest data innovators.</p>
+  <div class="hero-actions">
+    <a class="btn" href="{% url 'signup' %}">Get started</a>
+    <a class="btn btn-outline" href="{% url 'contact' %}">Contact us</a>
+  </div>
+</section>
+
+{% endblock %}
