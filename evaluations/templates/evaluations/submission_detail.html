@@ -1,0 +1,27 @@
+{% load static evaluation_extras %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/app.css' %}">
+
+<div class="app-container">
+  <h1>Submission detail — {{ submission.team.name }}</h1>
+  <p>Competition: {{ competition.name }} ({{ competition.get_track_display }}) · Status: {{ competition.status }}</p>
+  <table class="app-table">
+    <tr><th>Judge</th>{% for c in criteria %}<th>{{ c.name }} ({{ c.weight }}%)</th>{% endfor %}<th>Total /100</th></tr>
+    {% for row in grid %}
+    <tr>
+      <td>{{ row.assignment.judge.username }} ({{ row.assignment.get_status_display }})</td>
+      {% for c in criteria %}
+      <td>
+        {% with s=row.by_criterion|get_item:c.id %}
+        {% if s %}<strong>{{ s.value }}/{{ c.max_score }}</strong>{% if s.comment %}<br><em>{{ s.comment }}</em>{% endif %}{% else %}—{% endif %}
+        {% endwith %}
+      </td>
+      {% endfor %}
+      <td>{% if row.evaluation %}<strong>{{ row.evaluation.total }}</strong>{% else %}—{% endif %}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="99">No judges assigned yet.</td></tr>
+    {% endfor %}
+  </table>
+  <p><a href="{% url 'leaderboard' %}?competition={{ competition.id }}">Back to leaderboard</a></p>
+</div>

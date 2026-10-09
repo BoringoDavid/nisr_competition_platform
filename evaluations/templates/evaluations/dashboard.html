@@ -1,0 +1,25 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/app.css' %}">
+
+<div class="app-container">
+  <h1>Judge dashboard</h1>
+  {% if messages %}
+    {% for msg in messages %}<p class="alert">{{ msg }}</p>{% endfor %}
+  {% endif %}
+  <table class="app-table">
+    <tr><th>Competition</th><th>Submission</th><th>Status</th><th>Total</th><th></th></tr>
+    {% for a in assignments %}
+    <tr>
+      <td>{{ a.submission.competition.name }}</td>
+      <td>{% if blind %}Submission #{{ a.submission.id }}{% else %}{{ a.submission.team.name }}{% endif %}</td>
+      <td><span class="badge">{{ a.get_status_display }}</span></td>
+      <td>{% if a.evaluation %}{{ a.evaluation.total }} / 100{% else %}—{% endif %}</td>
+      <td><a href="{% url 'score_submission' a.id %}">Score</a></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No submissions assigned yet.</td></tr>
+    {% endfor %}
+  </table>
+  <p><a href="{% url 'leaderboard' %}">Leaderboard</a></p>
+</div>
