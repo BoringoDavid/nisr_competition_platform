@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16
+    container_name: nisr_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-nisr_db}
+      POSTGRES_USER: ${DB_USER:-nisr}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-nisr}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-nisr} -d ${DB_NAME:-nisr_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build: .
+    container_name: nisr_web
+    command: python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - .env
+    environment:
+      DB_ENGINE: postgres
+      DB_HOST: db
+      DB_PORT: "5432"
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - media_data:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  media_data:

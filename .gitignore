@@ -1,0 +1,30 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# --- Django ---
+*.sqlite3
+db.sqlite3
+/media/
+/staticfiles/
+*.log
+
+# --- Secrets / local config ---
+.env
+*.bak
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Editor / AI tool caches (never commit) ---
+.freebuff/
+.kilo/
+.kilocode/
+.kombai/
+
