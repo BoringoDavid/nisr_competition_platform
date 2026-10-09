@@ -10,6 +10,7 @@ urlpatterns = [
     path('dashboard/', include('dashboards.urls')),
     path('competitions/', include('competitions.urls')),
     path('submissions/', include('submissions.urls')),
+    path('evaluations/', include('evaluations.urls')),
 ]
 
 if settings.DEBUG:
