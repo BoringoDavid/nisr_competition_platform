@@ -1,0 +1,34 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/app.css' %}">
+
+<div class="app-container">
+  <h1>Score — {% if blind %}Submission #{{ assignment.submission.id }}{% else %}{{ submission.team.name }}{% endif %}</h1>
+  <p>Competition: {{ competition.name }} ({{ competition.get_track_display }}) · Status: {{ competition.status }}</p>
+  {% if not blind %}
+  <div class="rubric-panel">
+    <h2>Submission under review</h2>
+    {% if submission.github_link %}<p>GitHub: <a href="{{ submission.github_link }}">{{ submission.github_link }}</a></p>{% endif %}
+    {% if submission.deployed_link %}<p>Deployed: <a href="{{ submission.deployed_link }}">{{ submission.deployed_link }}</a></p>{% endif %}
+    {% if submission.documentation %}<p>Documentation: <a href="{{ submission.documentation.url }}">download</a></p>{% endif %}
+    {% if submission.static_file %}<p>Static file: <a href="{{ submission.static_file.url }}">download</a></p>{% endif %}
+    {% if submission.dynamic_file %}<p>Dynamic file: <a href="{{ submission.dynamic_file.url }}">download</a></p>{% endif %}
+    {% if submission.dynamic_link %}<p>Dynamic link: <a href="{{ submission.dynamic_link }}">{{ submission.dynamic_link }}</a></p>{% endif %}
+  </div>
+  {% endif %}
+  <div class="rubric-panel">
+    <h2>Rubric</h2>
+    <ul>
+      {% for c in criteria %}<li><strong>{{ c.name }}</strong> (max {{ c.max_score }}, {{ c.weight }}% of total) — {{ c.description }}</li>{% endfor %}
+    </ul>
+  </div>
+  {% if messages %}
+    {% for msg in messages %}<p class="alert">{{ msg }}</p>{% endfor %}
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save scores</button>
+  </form>
+  <p><a href="{% url 'judge_dashboard' %}">Back to dashboard</a></p>
+</div>

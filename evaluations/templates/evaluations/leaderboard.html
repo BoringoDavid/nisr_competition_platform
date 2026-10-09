@@ -1,0 +1,51 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/app.css' %}">
+
+<div class="app-container">
+  <h1>Leaderboard{% if competition %} — {{ competition.name }}{% endif %}{% if judging_round %} · {{ judging_round.name }}{% endif %}</h1>
+  <form method="get">
+    <select name="competition" onchange="this.form.submit()">
+      {% for c in competitions %}
+      <option value="{{ c.id }}" {% if competition and c.id == competition.id %}selected{% endif %}>{{ c.name }} ({{ c.status }})</option>
+      {% endfor %}
+    </select>
+    {% if rounds %}
+    <select name="round" onchange="this.form.submit()">
+      <option value="">Overall (all rounds)</option>
+      {% for r in rounds %}
+      <option value="{{ r.id }}" {% if judging_round and r.id == judging_round.id %}selected{% endif %}>{{ r.name }} ({{ r.get_status_display }}{% if r.cutoff_top_n %}, top {{ r.cutoff_top_n }} advance{% endif %})</option>
+      {% endfor %}
+    </select>
+    {% endif %}
+    <noscript><button type="submit">Filter</button></noscript>
+  </form>
+  {% if judging_round and judging_round.cutoff_top_n %}
+  <form method="post" action="{% url 'advance_round' judging_round.id %}">
+    {% csrf_token %}
+    <button type="submit">Close {{ judging_round.name }} — advance top {{ judging_round.cutoff_top_n }}</button>
+  </form>
+  {% endif %}
+  {% if messages %}
+    {% for msg in messages %}<p class="alert">{{ msg }}</p>{% endfor %}
+  {% endif %}
+  {% if published %}
+  <table class="app-table">
+    <tr><th>Rank</th><th>Team</th><th>Average total</th><th>Judges</th><th>Submitted</th></tr>
+    {% for row in rows %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{% if blind %}Submission #{{ row.id }}{% else %}<a href="{% url 'submission_detail' row.id %}">{{ row.team.name }}</a>{% endif %}</td>
+      <td>{% if row.avg_total %}{{ row.avg_total|floatformat:2 }} / 100{% else %}—{% endif %}</td>
+      <td>{{ row.judge_count }}</td>
+      <td>{{ row.submitted_at }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No submissions yet.</td></tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p>Results are published only after judging closes.</p>
+  {% endif %}
+  <p>Each judge total is out of 100; the table shows the average across judges.</p>
+</div>
