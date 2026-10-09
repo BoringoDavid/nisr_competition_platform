@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Past Competitions — NISR{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/landing.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <h1>Past Competitions</h1>
+  <p>Explore previous editions, winners, and creative submissions.</p>
+</section>
+
+<section class="landing-section">
+  <h2>Previous Editions</h2>
+  <div class="past-grid">
+
+    <article class="past-card">
+      <h3>2025 Hackathon</h3>
+      <p>National data-driven innovation challenge with three focus tracks: agriculture, finance, and open innovation.</p>
+      <a href="https://statistics.gov.rw/about/hackathon/2025-hackathon-competition" target="_blank" rel="noopener">View on NISR →</a>
+    </article>
+
+    <article class="past-card">
+      <h3>Infographics Archive</h3>
+      <p>Winning static and dynamic infographics from previous editions, published by the National Institute of Statistics of Rwanda.</p>
+      <a href="https://statistics.gov.rw/about/infographics" target="_blank" rel="noopener">View on NISR →</a>
+    </article>
+
+  </div>
+</section>
+
+<section class="landing-section">
+  <h2>Winners & Highlights</h2>
+  <p>
+    Each edition recognizes top teams across all tracks. Winning entries are published on the NISR website and are
+    used to promote data literacy across Rwanda.
+  </p>
+</section>
+
+<section class="landing-cta">
+  <h2>Want to be featured?</h2>
+  <p>Join the current edition and make your mark.</p>
+  <a class="btn" href="{% url 'competition_undergraduate' %}">Current competition</a>
+</section>
+
+{% endblock %}

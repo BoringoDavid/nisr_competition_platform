@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact — NISR{% endblock %}
+
+
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/landing.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <h1>Contact Us</h1>
+  <p>Reach out for any questions about the competition.</p>
+</section>
+
+<section class="landing-section">
+  <div class="contact-layout">
+
+    <!-- LEFT: info -->
+    <div class="contact-info">
+      <div class="contact-card">
+        <h3>General Inquiries</h3>
+        <p>Email: <a href="mailto:info@statistics.gov.rw">info@statistics.gov.rw</a></p>
+        <p>Tel: +250 788 383103</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>Competition Desk</h3>
+        <p>Email: <a href="mailto:infographic.competition@statistics.gov.rw">infographic.competition@statistics.gov.rw</a></p>
+        <p>Tel: 0788216358</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>Address</h3>
+        <p>KN 2 Av, No. 36, Muhima</p>
+        <p>Nyarugenge, Kigali, Rwanda</p>
+        <p>P.O Box 6139 Kigali</p>
+      </div>
+
+      <div class="contact-card">
+        <h3>Follow NISR</h3>
+        <p>
+          <a href="https://statistics.gov.rw" target="_blank" rel="noopener">statistics.gov.rw</a><br>
+          <a href="https://twitter.com/statisticsRW" target="_blank" rel="noopener">@statisticsRW</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- RIGHT: form -->
+    <div class="contact-form-wrap">
+      <h2>Send us a message</h2>
+      <form method="post" class="contact-form">
+        {% csrf_token %}
+
+        <div class="form-row">
+          <label for="id_name">Your name</label>
+          <input class="form-input" id="id_name" name="name" type="text" required>
+        </div>
+
+        <div class="form-row">
+          <label for="id_email">Email address</label>
+          <input class="form-input" id="id_email" name="email" type="email" required>
+        </div>
+
+        <div class="form-row">
+          <label for="id_subject">Subject</label>
+          <input class="form-input" id="id_subject" name="subject" type="text" required>
+        </div>
+
+        <div class="form-row">
+          <label for="id_message">Message</label>
+          <textarea class="form-input" id="id_message" name="message" rows="6" required></textarea>
+        </div>
+
+        <button class="btn" type="submit">Send message</button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

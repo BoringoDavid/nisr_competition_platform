@@ -10,3 +10,65 @@
   --nisr-white: #ffffff;
   --nisr-gray: #f4f6f9;
 }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  background: var(--nisr-gray);
+  color: var(--nisr-tertiary-dark);
+}
+
+a { color: var(--nisr-primary); }
+a:focus-visible, button:focus-visible {
+  outline: 3px solid rgba(45, 81, 161, .45);
+  outline-offset: 2px;
+}
+
+.btn {
+  display: inline-block;
+  background: var(--nisr-primary);
+  color: var(--nisr-white);
+  padding: 8px 16px;
+  border: 1px solid var(--nisr-primary);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn:hover { background: var(--nisr-primary-light); border-color: var(--nisr-primary-light); }
+
+.btn-outline { background: transparent; color: var(--nisr-primary); }
+.btn-outline:hover { background: var(--nisr-tertiary-light); }
+
+.btn-sm { padding: 6px 14px; }
+.btn-block { width: 100%; }
+
+.form-input,
+.form-row input,
+.form-row select,
+.form-row textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+.form-input:focus,
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+  outline: 2px solid var(--nisr-primary-light);
+  border-color: var(--nisr-primary-light);
+}
+
+.form-row { display: grid; gap: 6px; }
+.form-row label { font-size: 14px; font-weight: 600; }
+.form-help { color: #667085; font-size: 12px; }
+.form-error { color: #c93030; font-size: 12px; }

@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}NISR Competition Platform{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}">
+  
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <nav class="public-nav">
+    <a href="/" class="brand">
+      <span class="brand-mark">N</span>
+      <!-- <span class="brand-name">NISR Competition Platform</span> -->
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li class="has-dropdown">
+        <a href="#">Competition ▾</a>
+        <ul class="dropdown">
+          <li><a href="{% url 'competition_undergraduate' %}">Undergraduate</a></li>
+          <li><a href="{% url 'competition_high_school' %}">High School</a></li>
+        </ul>
+      </li>
+      <li><a href="{% url 'past_competitions' %}">Past Competitions</a></li>
+      <li><a href="{% url 'testimonials' %}">Testimonials</a></li>
+      <li><a href="{% url 'contact' %}">Contact</a></li>
+
+      {% if user.is_authenticated %}
+        {% if user.is_superuser %}
+          <li><a class="btn btn-sm" href="/admin/">Admin</a></li>
+        {% else %}
+          <li><a class="btn btn-sm" href="{% url 'competitor_dashboard' %}">Dashboard</a></li>
+        {% endif %}
+        <li><a class="btn btn-outline btn-sm" href="{% url 'logout' %}">Log out</a></li>
+      {% else %}
+        <!-- <li><a class="btn btn-sm" href="{% url 'login' %}">Login</a></li>
+        <li><a class="btn btn-outline btn-sm" href="{% url 'signup' %}">Register</a></li> -->
+      {% endif %}
+    </ul>
+  </nav>
+
+  <main class="dashboard">
+    {% if messages %}
+      <section class="alerts" aria-live="polite">
+        {% for msg in messages %}
+          <p class="alert alert-{{ msg.tags }}">{{ msg }}</p>
+        {% endfor %}
+      </section>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="nisr-footer">
+    <div class="footer-grid">
+      <div>
+        <h4>National Institute of Statistics of Rwanda</h4>
+        <p>KN 2 Av, No. 36, Muhima, Nyarugenge, Kigali</p>
+        <p>P.O Box 6139 Kigali, Rwanda</p>
+        <p>Tel: +250 788 383103</p>
+        <p>Email: <a href="mailto:info@statistics.gov.rw">info@statistics.gov.rw</a></p>
+      </div>
+      <div>
+        <h4>Competition Inquiries</h4>
+        <p>Email: <a href="mailto:infographic.competition@statistics.gov.rw">infographic.competition@statistics.gov.rw</a></p>
+        <p>Tel: 0788216358</p>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <p><a href="https://statistics.gov.rw" target="_blank">statistics.gov.rw</a></p>
+        <p><a href="https://twitter.com/statisticsRW" target="_blank">Twitter: @statisticsRW</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© National Institute of Statistics of Rwanda. All rights reserved.</p>
+    </div>
+  </footer>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

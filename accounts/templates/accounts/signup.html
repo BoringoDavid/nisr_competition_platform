@@ -1,13 +1,52 @@
+{% extends 'base.html' %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
-<link rel="stylesheet" href="{% static 'css/auth.css' %}">
 
-<div class="auth-container">
-  <h2>Sign Up</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-  </form>
-  <a class="auth-link" href="{% url 'login' %}">Already have an account?</a>
+{% block title %}Sign Up — NISR Platform{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-split reverse">
+
+  <div class="auth-left">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <!-- <span class="brand-mark">N</span> -->
+        <h1>Create your account</h1>
+      </div>
+      <p class="auth-sub">Join Rwanda's brightest data innovators.</p>
+
+      <form method="post" class="auth-form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
+
+        {% for field in form %}
+          <div class="form-row">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<small class="form-help">{{ field.help_text }}</small>{% endif %}
+            {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
+          </div>
+        {% endfor %}
+
+        <button class="btn btn-block" type="submit">Create account</button>
+      </form>
+
+      <p class="auth-footer">
+        Already registered? <a href="{% url 'login' %}">Log in</a>
+      </p>
+    </div>
+  </div>
+
+  <aside class="auth-right">
+    <img src="{% static 'img/auth-infographics.png' %}" alt="Data infographics" class="auth-image">
+    <div class="auth-overlay">
+      <h2>Turn statistics into impact.</h2>
+      <p>Join the current edition and submit your work.</p>
+    </div>
+  </aside>
+
 </div>
+{% endblock %}
