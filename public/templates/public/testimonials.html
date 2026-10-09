@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Testimonials — NISR{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/landing.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="page-hero">
+  <h1>Testimonials</h1>
+  <p>Voices from participants of past editions.</p>
+</section>
+
+<section class="landing-section">
+  <div class="testimonial-grid">
+
+    <blockquote class="testimonial">
+      <p>"The competition pushed us to think beyond the classroom and build something real from official data."</p>
+      <cite>— Participant, 2025 Hackathon</cite>
+    </blockquote>
+
+    <blockquote class="testimonial">
+      <p>"Designing an infographic from real statistics taught me how powerful visuals can be for public awareness."</p>
+      <cite>— Participant, Infographics</cite>
+    </blockquote>
+
+    <blockquote class="testimonial">
+      <p>"Teamwork across disciplines made the whole experience unforgettable. We learned as much from each other as from the data."</p>
+      <cite>— Finalist, 2025</cite>
+    </blockquote>
+
+    <blockquote class="testimonial">
+      <p>"Working with NISR data gave our project credibility. It felt like our work could actually matter."</p>
+      <cite>— Participant, 2024</cite>
+    </blockquote>
+
+    <blockquote class="testimonial">
+      <p>"The judging was rigorous but fair, and the feedback helped us improve."</p>
+      <cite>— Finalist, 2025</cite>
+    </blockquote>
+
+    <blockquote class="testimonial">
+      <p>"I would recommend this to any student interested in data, design, or technology."</p>
+      <cite>— Participant, 2024</cite>
+    </blockquote>
+
+  </div>
+</section>
+
+<section class="landing-cta">
+  <h2>Share your story</h2>
+  <p>Competed before? We'd love to hear from you.</p>
+  <a class="btn btn-outline" href="{% url 'contact' %}">Get in touch</a>
+</section>
+
+{% endblock %}

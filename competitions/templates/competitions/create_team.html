@@ -1,12 +1,27 @@
+{% extends 'base.html' %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
-<link rel="stylesheet" href="{% static 'css/auth.css' %}">
 
-<div class="auth-container">
-  <h2>Create Team</h2>
-  <form method="post">
+{% block title %}Create Team — NISR Platform{% endblock %}
+
+{% block content %}
+<div class="panel narrow">
+  <div class="section-head">
+    <h3>Create a team</h3>
+    <a class="btn btn-outline btn-sm" href="{% url 'competitor_dashboard' %}">Back</a>
+  </div>
+
+  <form method="post" class="stack">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Create</button>
+    {% for field in form %}
+      <div class="form-row">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
+      </div>
+    {% endfor %}
+    <button class="btn btn-block" type="submit">Create team</button>
   </form>
+
+  <p class="hint">After creating, invite a teammate — at least one member must be a Rwandan citizen.</p>
 </div>
+{% endblock %}

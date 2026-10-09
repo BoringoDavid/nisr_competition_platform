@@ -1,12 +1,48 @@
+{% extends 'base.html' %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+{% block title %}Login — NISR Platform{% endblock %}
+
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
-<div class="auth-container">
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Login</button>
-</form>
-<a href="{% url 'signup' %}">Create account</a>
+{% endblock %}
+
+{% block content %}
+<div class="auth-split">
+
+  <div class="auth-left">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <!-- <span class="brand-mark">N</span> -->
+        <h1>Welcome back</h1>
+      </div>
+      <p class="auth-sub">Log in to manage your teams and submissions.</p>
+
+      <form method="post" class="auth-form">
+        {% csrf_token %}
+        {% for field in form %}
+          <div class="form-row">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
+          </div>
+        {% endfor %}
+        <button class="btn btn-block" type="submit">Log in</button>
+      </form>
+
+      <p class="auth-footer">
+        Don't have an account? <a href="{% url 'signup' %}">Register as competitor</a>
+      </p>
+    </div>
+  </div>
+
+  <aside class="auth-right">
+    <img src="{% static 'img/auth-hackathon.jpg' %}" alt="Hackathon participants coding" class="auth-image">
+    <div class="auth-overlay">
+      <h2>Where Rwanda's data becomes ideas.</h2>
+      <p>Infographics · Hackathon · High School</p>
+    </div>
+  </aside>
+
 </div>
+{% endblock %}
