@@ -30,15 +30,23 @@ class Competition(models.Model):
 
 
 
+
+
 class Team(models.Model):
     class Status(models.TextChoices):
         PENDING = 'pending', 'Pending'
         CONFIRMED = 'confirmed', 'Confirmed'
 
+    class Sector(models.TextChoices):
+        AGRICULTURE = 'agriculture', 'Agricultural Productivity'
+        FINANCE = 'finance', 'Financial Inclusion'
+        OPEN = 'open', 'Open Innovation'
+
     name = models.CharField(max_length=150)
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name='teams')
     leader = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='led_teams')
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='teams', blank=True)
+    sector = models.CharField(max_length=20, choices=Sector.choices, blank=True)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -47,6 +55,7 @@ class Team(models.Model):
 
     def is_eligible(self):
         return self.members.filter(is_rwandan_citizen=True).exists()
+
     def is_full(self):
         return self.members.count() >= 2
 
@@ -59,7 +68,6 @@ class Team(models.Model):
         else:
             self.status = self.Status.PENDING
         self.save()
-
 class Invitation(models.Model):
     class Status(models.TextChoices):
         PENDING = 'pending', 'Pending'

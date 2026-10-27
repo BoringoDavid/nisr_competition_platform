@@ -1,23 +1,33 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends 'dashboard_base.html' %}
 
 {% block title %}Create Team — NISR Platform{% endblock %}
+{% block page_title %}Create Team{% endblock %}
 
 {% block content %}
 <div class="panel narrow">
   <div class="section-head">
     <h3>Create a team</h3>
-    <a class="btn btn-outline btn-sm" href="{% url 'competitor_dashboard' %}">Back</a>
   </div>
+
+  {% if selected_competition %}
+    <p class="item-meta" style="margin-bottom:14px;">
+      <strong>Competition:</strong> {{ selected_competition.name }}
+      ({{ selected_competition.get_track_display }})
+    </p>
+  {% endif %}
 
   <form method="post" class="stack">
     {% csrf_token %}
     {% for field in form %}
-      <div class="form-row">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {% if field.is_hidden %}
         {{ field }}
-        {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
-      </div>
+      {% else %}
+        <div class="form-row">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
+        </div>
+      {% endif %}
     {% endfor %}
     <button class="btn btn-block" type="submit">Create team</button>
   </form>

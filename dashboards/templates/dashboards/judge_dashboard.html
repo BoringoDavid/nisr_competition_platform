@@ -1,9 +1,18 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
-<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% extends 'dashboard_base.html' %}
 
-<div class="auth-container">
-  <h2>Judge Dashboard</h2>
-  <p>Welcome, {{ user.username }}</p>
-  <a class="auth-link" href="{% url 'logout' %}">Logout</a>
-</div>
+{% block title %}Dashboard — Judge{% endblock %}
+{% block page_title %}Judge Dashboard{% endblock %}
+{% block content %}
+
+<section class="stats">
+  <div class="stat"><span class="stat-value">0</span><span class="stat-label">Pending Reviews</span></div>
+  <div class="stat"><span class="stat-value">0</span><span class="stat-label">Completed</span></div>
+  <div class="stat"><span class="stat-value">0</span><span class="stat-label">Assigned</span></div>
+</section>
+
+<section class="panel">
+  <div class="section-head"><h3>Submissions to Review</h3></div>
+  <div class="empty"><p>Nothing assigned yet.</p></div>
+</section>
+
+{% endblock %}

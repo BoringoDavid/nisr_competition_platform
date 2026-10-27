@@ -11,6 +11,7 @@ from .models import User
 from competitions.models import *
 from competitions.forms import CompetitionForm
 from submissions.models import *
+from .forms import CompetitorSignUpForm, CustomAuthenticationForm
 
 def signup(request):
     initial = {}
@@ -28,10 +29,10 @@ def signup(request):
             return redirect(next_url)
         return redirect('competitor_dashboard')
     return render(request, 'accounts/signup.html', {'form': form, 'next': next_url})
-
-
+#==================== Custom login ===============================
 class CustomLoginView(LoginView):
     template_name = 'accounts/login.html'
+    authentication_form = CustomAuthenticationForm
 
     def get_success_url(self):
         user = self.request.user

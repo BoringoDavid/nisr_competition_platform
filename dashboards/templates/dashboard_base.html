@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Dashboard — NISR Platform{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="dashboard-body">
+
+  <aside class="sidebar">
+    <a href="/" class="sidebar-brand">
+      <span class="brand-mark">N</span>
+      <span class="brand-name">NISR</span>
+    </a>
+
+    <nav class="sidebar-nav">
+            {# ---------- COMPETITOR ---------- #}
+              {% if user.role == 'competitor' %}
+                  <a href="{% url 'competitor_dashboard' %}" class="side-link {% if active == 'dashboard' %}active{% endif %}">
+                    <span class="icon">🏠</span> Dashboard
+                  </a>
+                  <a href="{% url 'my_team' %}" class="side-link {% if active == 'teams' %}active{% endif %}">
+                    <span class="icon">👥</span> My Teams
+                  </a>
+                  <a href="{% url 'my_submissions' %}" class="side-link {% if active == 'submissions' %}active{% endif %}">
+                    <span class="icon">📤</span> My Submissions
+                  </a>
+                  <a href="{% url 'browse_competitions' %}" class="side-link {% if active == 'competitions' %}active{% endif %}">
+                    <span class="icon">🏆</span> Competitions
+                  </a>
+                  <a href="{% url 'my_results' %}" class="side-link {% if active == 'results' %}active{% endif %}">
+                    <span class="icon">📊</span> Results
+                  </a>
+                  <a href="{% url 'notifications' %}" class="side-link {% if active == 'notifications' %}active{% endif %}">
+                    <span class="icon">🔔</span> Notifications
+                  </a>
+                  <a href="{% url 'profile' %}" class="side-link {% if active == 'profile' %}active{% endif %}">
+                    <span class="icon">👤</span> Profile
+                  </a>
+                {% endif %}
+
+          {# ---------- JUDGE ---------- #}
+          {% if user.role == 'judge' %}
+            <a href="{% url 'judge_dashboard' %}" class="side-link {% if active == 'dashboard' %}active{% endif %}">
+              <span class="icon">🏠</span> Dashboard
+            </a>
+            <a href="#" class="side-link {% if active == 'pending' %}active{% endif %}">
+              <span class="icon">📥</span> Submissions to Review
+            </a>
+            <a href="#" class="side-link {% if active == 'reviews' %}active{% endif %}">
+              <span class="icon">📝</span> My Reviews
+            </a>
+            <a href="#" class="side-link {% if active == 'notifications' %}active{% endif %}">
+              <span class="icon">🔔</span> Notifications
+            </a>
+            <a href="#" class="side-link {% if active == 'profile' %}active{% endif %}">
+              <span class="icon">👤</span> Profile
+            </a>
+          {% endif %}
+
+          {# ---------- ADMIN ---------- #}
+          {% if user.role == 'admin' %}
+            <a href="{% url 'admin_dashboard' %}" class="side-link {% if active == 'dashboard' %}active{% endif %}">
+              <span class="icon">🏠</span> Dashboard
+            </a>
+            <a href="{% url 'admin_users' %}" class="side-link {% if active == 'users' %}active{% endif %}">
+              <span class="icon">👥</span> Manage Users
+            </a>
+            <a href="{% url 'admin_competitions' %}" class="side-link {% if active == 'competitions' %}active{% endif %}">
+              <span class="icon">🏆</span> Competitions
+            </a>
+            <a href="{% url 'admin_teams' %}" class="side-link {% if active == 'teams' %}active{% endif %}">
+              <span class="icon">👨‍👩‍👦</span> Teams
+            </a>
+            <a href="{% url 'admin_submissions' %}" class="side-link {% if active == 'submissions' %}active{% endif %}">
+              <span class="icon">📤</span> Submissions
+            </a>
+            <a href="{% url 'admin_evaluations' %}" class="side-link {% if active == 'evaluations' %}active{% endif %}">
+              <span class="icon">📝</span> Evaluations
+            </a>
+            <a href="{% url 'admin_contacts' %}" class="side-link {% if active == 'contacts' %}active{% endif %}">
+              <span class="icon">✉️</span> Contact Messages
+            </a>
+            <a href="{% url 'notifications' %}" class="side-link {% if active == 'notifications' %}active{% endif %}">
+              <span class="icon">🔔</span> Notifications
+            </a>
+            <a href="{% url 'profile' %}" class="side-link {% if active == 'profile' %}active{% endif %}">
+              <span class="icon">👤</span> Profile
+            </a>
+          {% endif %}
+
+    <a href="{% url 'logout' %}" class="sidebar-logout">
+      <span class="icon">🚪</span> Log out
+    </a>
+  </aside>
+
+  <div class="main-wrap">
+
+    <header class="topbar">
+      <div class="topbar-title">{% block page_title %}Dashboard{% endblock %}</div>
+      <div class="topbar-user">
+        <span class="avatar">{{ user.username|first|upper }}</span>
+        <span class="username">{{ user.username }}</span>
+        <span class="badge">{{ user.get_role_display }}</span>
+      </div>
+    </header>
+
+    <main class="main-content">
+      {% if messages %}
+        <section class="alerts" aria-live="polite">
+          {% for msg in messages %}
+            <p class="alert alert-{{ msg.tags }}">{{ msg }}</p>
+          {% endfor %}
+        </section>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </main>
+
+  </div>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

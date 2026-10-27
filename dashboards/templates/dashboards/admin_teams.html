@@ -1,0 +1,32 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Teams{% endblock %}
+{% block page_title %}Teams{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="section-head"><h3>All Teams</h3></div>
+
+    {% for team in teams %}
+      <article class="item">
+        <div class="item-body">
+          <div class="item-title">
+            <strong>{{ team.name }}</strong>
+            <span class="badge" data-status="{{ team.status }}">{{ team.get_status_display }}</span>
+          </div>
+          <p class="item-meta">
+            {{ team.competition.name }} · Leader: {{ team.leader.username }} ·
+            {{ team.members.count }}/2 members
+          </p>
+        </div>
+        <time class="item-date">{{ team.created_at|date:"d M Y" }}</time>
+      </article>
+    {% empty %}
+      <div class="empty-state">
+        <div class="empty-icon">👥</div>
+        <h4>No teams yet</h4>
+        <p>Competitors will appear here after they create teams for open competitions.</p>
+      </div>
+  {% endfor %}
+</section>
+{% endblock %}

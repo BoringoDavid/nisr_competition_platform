@@ -1,0 +1,37 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Competitions{% endblock %}
+{% block page_title %}Competitions{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="section-head">
+    <h3>All Competitions</h3>
+    <a class="btn" href="{% url 'create_competition' %}">+ Create</a>
+  </div>
+
+  {% for comp in competitions %}
+    <article class="item">
+      <div class="item-body">
+        <div class="item-title">
+          <strong>{{ comp.name }}</strong>
+          <span class="badge">{{ comp.get_track_display }}</span>
+          <span class="badge" data-status="{{ comp.status }}">{{ comp.get_status_display }}</span>
+        </div>
+        <p class="item-meta">
+          Reg: {{ comp.registration_deadline|date:"d M Y" }} ·
+          Sub: {{ comp.submission_deadline|date:"d M Y" }}
+        </p>
+      </div>
+      <a class="btn btn-outline btn-sm" href="/admin/competitions/competition/{{ comp.id }}/change/">Edit</a>
+    </article>
+  {% empty %}
+    <div class="empty-state">
+      <div class="empty-icon">🏆</div>
+      <h4>No competitions yet</h4>
+      <p>Create your first competition to open registration for competitors.</p>
+      <a class="btn" href="{% url 'create_competition' %}">+ Create Competition</a>
+    </div>
+  {% endfor %}
+</section>
+{% endblock %}

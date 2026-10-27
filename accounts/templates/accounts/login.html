@@ -13,13 +13,19 @@
   <div class="auth-left">
     <div class="auth-card">
       <div class="auth-brand">
-        <!-- <span class="brand-mark">N</span> -->
         <h1>Welcome back</h1>
       </div>
       <p class="auth-sub">Log in to manage your teams and submissions.</p>
 
       <form method="post" class="auth-form">
         {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="form-error" style="margin-bottom:10px;">
+            {{ form.non_field_errors.0 }}
+          </div>
+        {% endif %}
+
         {% for field in form %}
           <div class="form-row">
             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -27,6 +33,7 @@
             {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
           </div>
         {% endfor %}
+
         <button class="btn btn-block" type="submit">Log in</button>
       </form>
 

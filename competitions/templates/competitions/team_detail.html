@@ -1,0 +1,57 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}{{ team.name }} — Team{% endblock %}
+{% block page_title %}Team Details{% endblock %}
+
+{% block content %}
+
+<section class="panel">
+  <div class="section-head">
+    <h3>{{ team.name }}</h3>
+    <span class="badge" data-status="{{ team.status }}">{{ team.get_status_display }}</span>
+  </div>
+
+  <p class="item-meta" style="margin-top:10px;">
+    <strong>Competition:</strong> {{ team.competition.name }}<br>
+    <strong>Track:</strong> {{ team.competition.get_track_display }}<br>
+    <strong>Leader:</strong> {{ team.leader.username }}<br>
+    <strong>Created:</strong> {{ team.created_at|date:"d M Y" }}
+  </p>
+</section>
+
+<section class="panel" style="margin-top:20px;">
+  <div class="section-head"><h3>Members ({{ team.members.count }}/2)</h3></div>
+  <ul class="member-list">
+    {% for m in team.members.all %}
+      <li>{{ m.username }} {% if m.is_rwandan_citizen %}<span class="flag">🇷🇼</span>{% endif %}</li>
+    {% empty %}
+      <li>No members yet.</li>
+    {% endfor %}
+  </ul>
+
+  {% if team.status == 'confirmed' %}
+    <p class="alert alert-success" style="margin-top:14px;">✅ Team eligible for submission.</p>
+  {% else %}
+    <p class="alert alert-warning" style="margin-top:14px;">⚠ Team needs 2 members, at least one Rwandan citizen.</p>
+  {% endif %}
+</section>
+
+<section class="panel" style="margin-top:20px;">
+  <div class="section-head"><h3>Submission</h3></div>
+  {% if team.submission %}
+    <p class="item-meta">Submitted on {{ team.submission.submitted_at|date:"d M Y, H:i" }}
+      {% if team.submission.is_late %}<span class="badge badge-late">Late</span>{% endif %}
+    </p>
+    <a class="btn" href="{% url 'submit' team.id %}">Edit submission</a>
+  {% else %}
+    <div class="empty"><p>No submission yet.</p></div>
+    <a class="btn" href="{% url 'submit' team.id %}">Submit work</a>
+  {% endif %}
+</section>
+
+<div class="actions" style="margin-top:24px;">
+  <a class="btn btn-outline" href="{% url 'invite_member' team.id %}">Invite member</a>
+  <a class="btn btn-outline" href="{% url 'my_team' %}">Back to teams</a>
+</div>
+
+{% endblock %}

@@ -3,6 +3,9 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
+from .models import ContactMessage
+from django.core.mail import EmailMessage
+
 
 User = get_user_model()
 
@@ -34,7 +37,6 @@ def past_competitions(request):
 def testimonials(request):
     return render(request, 'public/testimonials.html')
 
-
 def contact(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -42,23 +44,35 @@ def contact(request):
         subject = request.POST.get('subject')
         message_body = request.POST.get('message')
 
+        # Save to DB
+        ContactMessage.objects.create(
+            name=name, email=email, subject=subject, message=message_body,
+        )
+
+        # Send email (optional)
         full_message = f"""
-New contact message from NISR Competition Platform
+New contact message
 
 Name: {name}
 Email: {email}
 
-Message:
 {message_body}
 """
-        send_mail(
+        # send_mail(
+        #     subject=f"[Contact] {subject}",
+        #     message=full_message,
+        #     from_email=settings.DEFAULT_FROM_EMAIL,
+        #     recipient_list=[settings.DEFAULT_FROM_EMAIL],
+        #     reply_to=[email],
+        # )
+        EmailMessage(
             subject=f"[Contact] {subject}",
-            message=full_message,
+            body=full_message,
             from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[settings.DEFAULT_FROM_EMAIL],
+            to=[settings.DEFAULT_FROM_EMAIL],
             reply_to=[email],
-        )
-        messages.success(request, "Your message has been sent. We'll get back to you soon.")
+        ).send()
+        messages.success(request, "Your message has been sent. We'll reply soon.")
         return redirect('contact')
 
     return render(request, 'public/contact.html')

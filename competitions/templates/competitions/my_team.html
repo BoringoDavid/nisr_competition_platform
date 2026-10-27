@@ -1,12 +1,13 @@
-{% extends 'base.html' %}
+{% extends 'dashboard_base.html' %}
 
 {% block title %}My Teams — NISR Platform{% endblock %}
+{% block page_title %}My Teams{% endblock %}
 
 {% block content %}
 <section class="panel">
   <div class="section-head">
-    <h3>My teams</h3>
-    <a class="btn" href="{% url 'create_team' %}">+ Create team</a>
+    <h3>My Teams</h3>
+    <a class="btn" href="{% url 'create_team' %}">+ Create Team</a>
   </div>
 
   {% for team in teams %}
@@ -27,14 +28,18 @@
         </ul>
       </div>
       <div class="actions">
+        <a class="btn btn-outline btn-sm" href="{% url 'team_detail' team.id %}">View</a>
         <a class="btn btn-outline btn-sm" href="{% url 'invite_member' team.id %}">Invite</a>
         <a class="btn btn-sm" href="{% url 'submit' team.id %}">
-          {% if team.submission %}Edit submission{% else %}Submit{% endif %}
+          {% if team.submission %}Edit{% else %}Submit{% endif %}
         </a>
       </div>
     </article>
   {% empty %}
-    <div class="empty"><p>No teams yet.</p></div>
+    <div class="empty">
+      <p>No teams yet.</p>
+      <a class="btn btn-outline" href="{% url 'create_team' %}">Create your first team</a>
+    </div>
   {% endfor %}
 </section>
 {% endblock %}

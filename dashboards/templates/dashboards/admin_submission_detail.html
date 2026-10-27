@@ -1,0 +1,55 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Submission — {{ submission.team.name }}{% endblock %}
+{% block page_title %}Submission Detail{% endblock %}
+
+{% block content %}
+
+<section class="panel">
+  <div class="section-head">
+    <h3>{{ submission.team.name }}</h3>
+    {% if submission.is_late %}<span class="badge badge-late">Late</span>{% endif %}
+  </div>
+
+  <p class="item-meta"><strong>Competition:</strong> {{ submission.competition.name }}</p>
+  <p class="item-meta"><strong>Track:</strong> {{ submission.competition.get_track_display }}</p>
+  <p class="item-meta"><strong>Submitted:</strong> {{ submission.submitted_at|date:"d M Y, H:i" }}</p>
+  <p class="item-meta"><strong>Members:</strong>
+    {% for m in submission.team.members.all %}
+      {{ m.username }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+  </p>
+</section>
+
+<section class="panel" style="margin-top:20px;">
+  <div class="section-head"><h3>Files & Links</h3></div>
+
+  {% if submission.competition.track == 'hackathon' %}
+    <p class="item-meta"><strong>GitHub:</strong>
+      {% if submission.github_link %}<a href="{{ submission.github_link }}" target="_blank">{{ submission.github_link }}</a>{% else %}—{% endif %}
+    </p>
+    <p class="item-meta"><strong>Deployed app:</strong>
+      {% if submission.deployed_link %}<a href="{{ submission.deployed_link }}" target="_blank">{{ submission.deployed_link }}</a>{% else %}—{% endif %}
+    </p>
+    <p class="item-meta"><strong>Documentation:</strong>
+      {% if submission.documentation %}<a href="{{ submission.documentation.url }}" target="_blank">Download</a>{% else %}—{% endif %}
+    </p>
+  {% else %}
+    <p class="item-meta"><strong>Static file:</strong>
+      {% if submission.static_file %}<a href="{{ submission.static_file.url }}" target="_blank">Download</a>{% else %}—{% endif %}
+    </p>
+    <p class="item-meta"><strong>Dynamic file:</strong>
+      {% if submission.dynamic_file %}<a href="{{ submission.dynamic_file.url }}" target="_blank">Download</a>{% else %}—{% endif %}
+    </p>
+    <p class="item-meta"><strong>Dynamic link:</strong>
+      {% if submission.dynamic_link %}<a href="{{ submission.dynamic_link }}" target="_blank">{{ submission.dynamic_link }}</a>{% else %}—{% endif %}
+    </p>
+  {% endif %}
+
+  <p class="item-meta" style="margin-top:14px;"><strong>IP agreement:</strong> {{ submission.agree_ip|yesno:"Yes,No" }}</p>
+  <p class="item-meta"><strong>AI disclosed:</strong> {{ submission.disclose_ai|yesno:"Yes,No" }}</p>
+</section>
+
+<a class="btn btn-outline" href="{% url 'admin_submissions' %}" style="margin-top:20px;">Back to submissions</a>
+
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Profile{% endblock %}
+{% block page_title %}My Profile{% endblock %}
+
+{% block content %}
+
+<!-- Identity card -->
+
+<div class="layout" style="margin-top:24px;">
+
+  <!-- Editable info -->
+  <div class="main-col">
+    <section class="panel">
+      <div class="section-head"><h3>Edit Profile</h3></div>
+
+      <form method="post" class="stack" style="margin-top:16px;">
+        {% csrf_token %}
+
+        {% for field in form %}
+          <div class="form-row">
+            {% if field.name == 'is_rwandan_citizen' %}
+              <label class="checkbox-row">
+                {{ field }}
+                <span>{{ field.label }}</span>
+              </label>
+            {% else %}
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+              {% if field.help_text %}<small class="form-help">{{ field.help_text }}</small>{% endif %}
+            {% endif %}
+            {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
+          </div>
+        {% endfor %}
+
+        <div class="actions">
+          <button class="btn" type="submit">Save changes</button>
+          <a class="btn btn-outline" href="{% url 'profile' %}">Cancel</a>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <!-- Side actions -->
+  <aside class="side-col">
+    <section class="panel">
+      <div class="section-head"><h3>Security</h3></div>
+      <p class="item-meta">Update your password regularly to keep your account safe.</p>
+      <a class="btn btn-outline btn-sm" href="/accounts/password_change/">Change password</a>
+    </section>
+
+    <section class="panel" style="margin-top:20px;">
+      <div class="section-head"><h3>Danger Zone</h3></div>
+      <p class="item-meta">Deleting your account is permanent.</p>
+      <button class="btn btn-outline btn-sm" disabled>Delete account</button>
+    </section>
+
+    <section class="panel profile-header">
+      <div class="profile-avatar">{{ user.username|first|upper }}</div>
+      <div class="profile-id">
+        <!-- <h3>{{ user.get_full_name|default:user.username }}</h3> -->
+        <!-- <p class="item-meta">
+          @{{ user.username }} ·
+          <span class="badge">{{ user.get_role_display }}</span>
+        </p> -->
+      </div>
+      <div class="profile-meta">
+        <p><strong>Joined:</strong> {{ user.date_joined|date:"d M Y" }}</p>
+        <p><strong>Last login:</strong> {{ user.last_login|date:"d M Y, H:i" }}</p>
+      </div>
+    </section>
+  </aside>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Open Competitions{% endblock %}
+{% block page_title %}Open Competitions{% endblock %}
+
+{% block content %}
+
+<section class="panel">
+  <div class="section-head"><h3>Open Competitions</h3></div>
+
+  {% for comp in competitions %}
+    <article class="item">
+      <div class="item-body">
+        <div class="item-title">
+          <strong>{{ comp.name }}</strong>
+          <span class="badge">{{ comp.get_track_display }}</span>
+        </div>
+        <p class="item-meta">
+          Register by: {{ comp.registration_deadline|date:"d M Y" }} ·
+          Submit by: {{ comp.submission_deadline|date:"d M Y" }}
+        </p>
+        <p class="item-meta">{{ comp.description|default:"" }}</p>
+      </div>
+      <div class="actions">
+        <a class="btn btn-sm" href="{% url 'create_team' %}?competition={{ comp.id }}">Register</a>
+      </div>
+    </article>
+  {% empty %}
+    <div class="empty"><p>No open competitions right now.</p></div>
+  {% endfor %}
+</section>
+
+{% endblock %}

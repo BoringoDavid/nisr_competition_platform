@@ -1,0 +1,98 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Submissions{% endblock %}
+{% block page_title %}All Submissions{% endblock %}
+
+{% block content %}
+
+<section class="panel">
+  <div class="section-head">
+    <h3>Filters</h3>
+    <span class="badge">{{ submissions|length }} result{{ submissions|length|pluralize }}</span>
+  </div>
+
+  <form method="get" class="filter-bar">
+    <div class="filter-group">
+      <label>Competition</label>
+      <select name="competition">
+        <option value="">All</option>
+        {% for c in competitions %}
+          <option value="{{ c.id }}" {% if filters.competition == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Track</label>
+      <select name="track">
+        <option value="">All</option>
+        {% for val, label in track_choices %}
+          <option value="{{ val }}" {% if filters.track == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Sector</label>
+      <select name="sector">
+        <option value="">All</option>
+        {% for val, label in sector_choices %}
+          <option value="{{ val }}" {% if filters.sector == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>From</label>
+      <input type="date" name="from" value="{{ filters.from }}">
+    </div>
+
+    <div class="filter-group">
+      <label>To</label>
+      <input type="date" name="to" value="{{ filters.to }}">
+    </div>
+
+    <div class="filter-group checkbox">
+      <label><input type="checkbox" name="late" value="1" {% if filters.late %}checked{% endif %}> Late only</label>
+    </div>
+
+    <div class="filter-actions">
+      <button class="btn btn-sm" type="submit">Apply</button>
+      <a class="btn btn-outline btn-sm" href="{% url 'admin_submissions' %}">Reset</a>
+    </div>
+  </form>
+</section>
+
+<section class="panel" style="margin-top:20px;">
+  <div class="section-head">
+    <h3>Submissions</h3>
+  </div>
+
+  {% for sub in submissions %}
+    <article class="item">
+      <div class="item-body">
+        <div class="item-title">
+          <strong>{{ sub.team.name }}</strong>
+          {% if sub.team.sector %}<span class="badge">{{ sub.team.get_sector_display }}</span>{% endif %}
+          {% if sub.is_late %}<span class="badge badge-late">Late</span>{% endif %}
+        </div>
+        <p class="item-meta">
+          {{ sub.competition.name }} · {{ sub.competition.get_track_display }}
+        </p>
+      </div>
+      <div class="actions">
+        <time class="item-date">{{ sub.submitted_at|date:"d M Y" }}</time>
+        <a class="btn btn-outline btn-sm" href="{% url 'admin_submission_detail' sub.id %}">View</a>
+      </div>
+    </article>
+  {% empty %}
+    <div class="empty-state">
+      <div class="empty-icon">📭</div>
+      <h4>No submissions match your filters</h4>
+      <p>Try widening the date range or clearing some filters.</p>
+      <a class="btn btn-outline" href="{% url 'admin_submissions' %}">Reset filters</a>
+    </div>
+  {% endfor %}
+</section>
+
+{% endblock %}

@@ -1,18 +1,22 @@
-{% extends 'base.html' %}
+{% extends 'dashboard_base.html' %}
 
 {% block title %}Submit — {{ team.name }}{% endblock %}
+{% block page_title %}Submit Work{% endblock %}
 
 {% block content %}
+
 <div class="panel narrow">
   <div class="section-head">
     <h3>{{ team.name }} — Submission</h3>
     <span class="badge">{{ team.competition.get_track_display }}</span>
   </div>
 
-  <p class="item-meta">Competition: <strong>{{ team.competition.name }}</strong></p>
-  <p class="item-meta">Deadline: <strong>{{ team.competition.submission_deadline|date:"d M Y, H:i" }}</strong></p>
+  <p class="item-meta" style="margin-top:10px;">
+    <strong>Competition:</strong> {{ team.competition.name }}<br>
+    <strong>Deadline:</strong> {{ team.competition.submission_deadline|date:"d M Y, H:i" }}
+  </p>
 
-  <form method="post" enctype="multipart/form-data" class="stack">
+  <form method="post" enctype="multipart/form-data" class="stack" style="margin-top:16px;">
     {% csrf_token %}
     {% for field in form %}
       <div class="form-row">
@@ -26,6 +30,7 @@
     <button class="btn btn-block" type="submit">Save submission</button>
   </form>
 
-  <a class="btn btn-outline" href="{% url 'competitor_dashboard' %}">Back to dashboard</a>
+  <a class="btn btn-outline" href="{% url 'my_team' %}" style="margin-top:14px;">Back to teams</a>
 </div>
+
 {% endblock %}

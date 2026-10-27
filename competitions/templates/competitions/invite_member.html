@@ -1,31 +1,39 @@
-{% extends 'base.html' %}
+{% extends 'dashboard_base.html' %}
 
 {% block title %}Invite — {{ team.name }}{% endblock %}
+{% block page_title %}Invite Member{% endblock %}
 
 {% block content %}
 <div class="panel narrow">
+
   <div class="section-head">
     <h3>Invite teammate — {{ team.name }}</h3>
     <span class="badge" data-status="{{ team.status }}">{{ team.get_status_display }}</span>
   </div>
 
-  <form method="post" class="stack">
+  {% if messages %}
+    {% for msg in messages %}
+      <p class="alert alert-{{ msg.tags }}">{{ msg }}</p>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post" class="stack" style="margin-top:14px;">
     {% csrf_token %}
     <div class="form-row">
-      <label>Email address</label>
-      <input class="form-input" type="email" name="email" placeholder="member@example.com" required>
+      <label for="id_email">Email address</label>
+      <input class="form-input" id="id_email" type="email" name="email" placeholder="member@example.com" required>
     </div>
     <button class="btn btn-block" type="submit">Send invitation</button>
   </form>
 
-  <h4>Pending invitations</h4>
+  <h4 style="margin-top:24px;">Pending Invitations</h4>
   {% for inv in invitations %}
     <p class="item-meta">{{ inv.email }} — expires {{ inv.expires_at|date:"d M Y" }}</p>
   {% empty %}
     <p class="item-meta">None.</p>
   {% endfor %}
 
-  <h4>Members ({{ team.members.count }}/2)</h4>
+  <h4 style="margin-top:20px;">Members ({{ team.members.count }}/2)</h4>
   <ul class="member-list">
     {% for m in team.members.all %}
       <li>{{ m.username }} {% if m.is_rwandan_citizen %}<span class="flag">🇷🇼</span>{% endif %}</li>
@@ -33,11 +41,12 @@
   </ul>
 
   {% if team.status == 'confirmed' %}
-    <p class="alert alert-success">✅ Team eligible</p>
+    <p class="alert alert-success" style="margin-top:16px;">✅ Team eligible</p>
   {% else %}
-    <p class="alert alert-warning">⚠ Needs 2 members, at least one Rwandan citizen.</p>
+    <p class="alert alert-warning" style="margin-top:16px;">⚠ Needs 2 members, at least one Rwandan citizen.</p>
   {% endif %}
 
-  <a class="btn btn-outline" href="{% url 'competitor_dashboard' %}">Back to dashboard</a>
+  <a class="btn btn-outline" href="{% url 'my_team' %}" style="margin-top:16px;">Back to my teams</a>
+
 </div>
 {% endblock %}

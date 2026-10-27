@@ -1,0 +1,32 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Contact Messages{% endblock %}
+{% block page_title %}Contact Messages{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="section-head">
+    <h3>Contact Messages</h3>
+    <span class="badge">{{ messages_list|length }} total</span>
+  </div>
+
+  {% for msg in messages_list %}
+    <article class="item" style="align-items:flex-start;">
+      <div class="item-body" style="flex:1;">
+        <div class="item-title">
+          <strong>{{ msg.subject }}</strong>
+          {% if not msg.is_read %}<span class="badge badge-late">New</span>{% endif %}
+        </div>
+        <p class="item-meta">From: {{ msg.name }} ({{ msg.email }})</p>
+        <p class="item-meta" style="margin-top:6px;">{{ msg.message|truncatewords:30 }}</p>
+      </div>
+      <div class="actions">
+        <time class="item-date">{{ msg.created_at|date:"d M Y, H:i" }}</time>
+        <a class="btn btn-outline btn-sm" href="mailto:{{ msg.email }}?subject=Re: {{ msg.subject }}">Reply</a>
+      </div>
+    </article>
+  {% empty %}
+    <div class="empty"><p>No messages yet.</p></div>
+  {% endfor %}
+</section>
+{% endblock %}

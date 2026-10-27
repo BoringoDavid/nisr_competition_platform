@@ -1,0 +1,50 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Manage Users{% endblock %}
+{% block page_title %}Manage Users{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="section-head">
+    <h3>All Users</h3>
+    <div class="actions">
+      <a class="btn btn-outline btn-sm" href="?role=competitor">Competitors</a>
+      <a class="btn btn-outline btn-sm" href="?role=judge">Judges</a>
+      <a class="btn btn-outline btn-sm" href="?role=admin">Admins</a>
+      <a class="btn btn-outline btn-sm" href="{% url 'admin_users' %}">All</a>
+    </div>
+  </div>
+
+  <div class="actions" style="margin:12px 0;">
+    <a class="btn btn-sm" href="{% url 'create_admin' %}">+ Admin</a>
+    <a class="btn btn-sm" href="{% url 'create_judge' %}">+ Judge</a>
+  </div>
+
+  {% for u in users %}
+    <article class="item">
+      <div class="item-body">
+        <div class="item-title">
+          <strong>{{ u.username }}</strong>
+          <span class="badge">{{ u.get_role_display|default:"—" }}</span>
+          {% if not u.is_active %}<span class="badge badge-late">Inactive</span>{% endif %}
+        </div>
+        <p class="item-meta">{{ u.email|default:"—" }} · {{ u.university|default:"—" }}</p>
+      </div>
+      <div class="actions">
+        <time class="item-date">{{ u.date_joined|date:"d M Y" }}</time>
+        {% if not u.is_superuser and u != request.user %}
+          <a class="btn btn-outline btn-sm" href="{% url 'admin_toggle_user' u.id %}">
+            {% if u.is_active %}Deactivate{% else %}Activate{% endif %}
+          </a>
+        {% endif %}
+      </div>
+    </article>
+  {% empty %}
+    <div class="empty-state">
+      <div class="empty-icon">👤</div>
+      <h4>No users found</h4>
+      <p>Adjust your filters or create a new judge/admin to get started.</p>
+    </div>
+  {% endfor %}
+</section>
+{% endblock %}

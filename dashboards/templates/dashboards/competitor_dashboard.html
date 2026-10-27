@@ -1,29 +1,22 @@
-{% extends 'base.html' %}
+{% extends 'dashboard_base.html' %}
 
-{% block title %}Dashboard — NISR Platform{% endblock %}
-
+{% block title %}Dashboard — Competitor{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
 {% block content %}
 
-<section class="welcome">
-  <h2>Welcome back, {{ user.username }}</h2>
-  <p>Manage your teams, track submissions and find competitions to enter.</p>
-</section>
-
 <section class="stats">
-  <div class="stat"><span class="stat-value">{{ teams|length }}</span><span class="stat-label">My teams</span></div>
+  <div class="stat"><span class="stat-value">{{ teams|length }}</span><span class="stat-label">My Teams</span></div>
   <div class="stat"><span class="stat-value">{{ submissions|length }}</span><span class="stat-label">Submissions</span></div>
-  <div class="stat"><span class="stat-value">{{ open_competitions|length }}</span><span class="stat-label">Open competitions</span></div>
+  <div class="stat"><span class="stat-value">{{ open_competitions|length }}</span><span class="stat-label">Open Competitions</span></div>
 </section>
 
 <div class="layout">
   <div class="main-col">
-
     <section class="panel">
       <div class="section-head">
-        <h3>My teams</h3>
-        <a class="btn" href="{% url 'create_team' %}">+ Create team</a>
+        <h3>My Teams</h3>
+        <a class="btn" href="{% url 'create_team' %}">+ Create Team</a>
       </div>
-
       {% for team in teams %}
         <article class="item">
           <div class="item-body">
@@ -31,56 +24,29 @@
               <strong>{{ team.name }}</strong>
               <span class="badge" data-status="{{ team.status }}">{{ team.get_status_display }}</span>
             </div>
-            <p class="item-meta">
-              {{ team.competition.name }} · {{ team.competition.get_track_display }} ·
-              {{ team.members.count }}/2 members
-            </p>
+            <p class="item-meta">{{ team.competition.name }} · {{ team.members.count }}/2 members</p>
           </div>
           <div class="actions">
             <a class="btn btn-outline btn-sm" href="{% url 'invite_member' team.id %}">Invite</a>
-            <a class="btn btn-sm" href="{% url 'submit' team.id %}">
-              {% if team.submission %}Edit{% else %}Submit{% endif %}
-            </a>
+            <a class="btn btn-sm" href="{% url 'submit' team.id %}">Submit</a>
           </div>
         </article>
       {% empty %}
-        <div class="empty">
-          <p>You are not in a team yet.</p>
-          <a class="btn btn-outline" href="{% url 'create_team' %}">Create your first team</a>
-        </div>
+        <div class="empty"><p>No teams yet.</p></div>
       {% endfor %}
     </section>
-
-    <section class="panel">
-      <div class="section-head"><h3>My submissions</h3></div>
-      {% for sub in submissions %}
-        <article class="item">
-          <div class="item-body">
-            <div class="item-title">
-              <strong>{{ sub.team.name }}</strong>
-              {% if sub.is_late %}<span class="badge badge-late">Late</span>{% endif %}
-            </div>
-            <p class="item-meta">{{ sub.competition.name }} · {{ sub.competition.get_track_display }}</p>
-          </div>
-          <time class="item-date">{{ sub.submitted_at|date:"d M Y, H:i" }}</time>
-        </article>
-      {% empty %}
-        <div class="empty"><p>No submissions yet.</p></div>
-      {% endfor %}
-    </section>
-
   </div>
 
   <aside class="side-col">
     <section class="panel">
-      <div class="section-head"><h3>Open competitions</h3></div>
+      <div class="section-head"><h3>Open Competitions</h3></div>
       {% for comp in open_competitions %}
         <article class="comp">
           <strong>{{ comp.name }}</strong>
           <span class="track">{{ comp.get_track_display }}</span>
           <dl>
-            <div><dt>Register by</dt><dd>{{ comp.registration_deadline|date:"d M Y, H:i" }}</dd></div>
-            <div><dt>Submit by</dt><dd>{{ comp.submission_deadline|date:"d M Y, H:i" }}</dd></div>
+            <div><dt>Register by</dt><dd>{{ comp.registration_deadline|date:"d M Y" }}</dd></div>
+            <div><dt>Submit by</dt><dd>{{ comp.submission_deadline|date:"d M Y" }}</dd></div>
           </dl>
         </article>
       {% empty %}

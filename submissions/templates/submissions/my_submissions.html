@@ -1,0 +1,33 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}My Submissions{% endblock %}
+{% block page_title %}My Submissions{% endblock %}
+
+{% block content %}
+
+<section class="panel">
+  <div class="section-head"><h3>All Submissions</h3></div>
+
+  {% for sub in submissions %}
+    <article class="item">
+      <div class="item-body">
+        <div class="item-title">
+          <strong>{{ sub.team.name }}</strong>
+          {% if sub.is_late %}<span class="badge badge-late">Late</span>{% endif %}
+        </div>
+        <p class="item-meta">{{ sub.competition.name }} · {{ sub.competition.get_track_display }}</p>
+      </div>
+      <div class="actions">
+        <time class="item-date">{{ sub.submitted_at|date:"d M Y" }}</time>
+        <a class="btn btn-outline btn-sm" href="{% url 'submit' sub.team.id %}">Edit</a>
+      </div>
+    </article>
+  {% empty %}
+    <div class="empty">
+      <p>No submissions yet.</p>
+      <a class="btn btn-outline" href="{% url 'my_team' %}">Go to my teams</a>
+    </div>
+  {% endfor %}
+</section>
+
+{% endblock %}
